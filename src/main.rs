@@ -41,7 +41,7 @@ fn build_ui(application: &gtk::Application) {
     window.set_title("Dokka - Your friendly Docker");
     window.set_border_width(10);
     window.set_position(gtk::WindowPosition::Center);
-    window.set_default_size(350, 70);
+    window.set_default_size(1000, 400);
 
     window.connect_delete_event(clone!(window => move |_, _| {
         window.destroy();
@@ -60,9 +60,15 @@ fn build_ui(application: &gtk::Application) {
         let name: &str = &docker.id.unwrap_or(String::from("")).to_owned();
         let image: &str = &docker.image.unwrap_or(String::from("")).to_owned();
         let created_at: &str = &docker.created_at.unwrap_or(String::from("")).to_owned();
+        let ports: &str = &docker.ports.unwrap_or(String::from("")).to_owned();
+        let status: &str = &docker.status.unwrap_or(String::from("")).to_owned();
         let label1 = Label::new(Some(name));
         let label2 = Label::new(Some(image));
         let label3 = Label::new(Some(created_at));
+        let label4 = Label::new(Some(ports));
+        let label5 = Label::new(Some(status));
+        label1.set_selectable(true);
+        label2.set_selectable(true);
 
         if i == 0 {
             grid.attach(&label1, 0, 0, width, height);
@@ -78,6 +84,8 @@ fn build_ui(application: &gtk::Application) {
 
         grid.attach_next_to(&label2, &label1, PositionType::Right, width, height);
         grid.attach_next_to(&label3, &label2, PositionType::Right, width, height);
+        grid.attach_next_to(&label4, &label3, PositionType::Right, width, height);
+        grid.attach_next_to(&label5, &label4, PositionType::Right, width, height);
 
         i += 1;
         let cl = label1.clone();
